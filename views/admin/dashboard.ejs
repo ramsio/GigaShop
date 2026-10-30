@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Panel Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; padding:16px; margin:0; background:#f4f6f8; }
+        .panel { display:flex; gap:16px; flex-wrap:wrap; max-width:1200px; margin:0 auto; }
+        .col { flex:1 1 360px; background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+        table { width:100%; border-collapse:collapse; margin-top:10px; }
+        th, td { border:1px solid #eee; padding:8px; text-align:left; }
+        input, select, textarea { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; }
+        .nav { display:flex; gap:8px; margin-bottom:12px; }
+        .nav a { padding:8px 12px; background:#333; color:#fff; border-radius:4px; text-decoration:none; }
+    </style>
+</head>
+<body>
+    <h1>Panel de Administración</h1>
+
+    <div class="nav">
+        <a href="/admin/inventario">Inventario</a>
+        <a href="/admin/usuarios">Usuarios</a>
+    </div>
+
+    <div class="panel">
+        <div class="col">
+            <h2>Agregar Producto</h2>
+            <form action="/admin/producto" method="POST" enctype="multipart/form-data">
+                <label>Nombre</label>
+                <input type="text" name="nombre" required> <br><br>
+
+                <label>Precio</label>
+                <input type="number" name="precio" step="0.01" required> <br><br>
+
+                <label>Stock</label>
+                <input type="number" name="stock" required> <br><br>
+
+                <label>Categoría</label>
+                <select name="categoria">
+                    <% categorias.forEach(c => { %>
+                        <option value="<%= c.nombre %>"><%= c.nombre %></option>
+                    <% }) %>
+                </select> <br><br>
+
+                <label>Imagen</label>
+                <input type="file" name="imagenProducto" accept=".jpg,.jpeg,.png,.webp">
+
+                <div style="margin-top:12px;">
+                    <button type="submit">Guardar Producto</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top:18px;">Lista de Productos</h3>
+            <table>
+                <thead><tr><th>Nombre</th><th>Categoría</th><th>Stock</th><th>Estado</th><th>Acción</th></tr></thead>
+                <tbody>
+                    <% productos.forEach(p => { %>
+                        <tr>
+                            <td><%= p.nombre %></td>
+                            <td><%= p.categoria %></td>
+                            <td><%= p.stock %></td>
+                            <td><%= p.activo ? 'Activo' : 'Inactivo' %></td>
+                            <td><a href="/admin/toggle/<%= p._id %>"><%= p.activo ? 'Deshabilitar' : 'Habilitar' %></a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col">
+            <h2>Configurar Banner</h2>
+            <form action="/admin/banner" method="POST" enctype="multipart/form-data">
+                <label>Cabecera</label>
+                <input type="text" name="cabecera" value="<%= bannerConfig.cabecera %>"><br><br>
+                <label>Descripción</label>
+                <textarea name="descripcion" rows="3"><%= bannerConfig.descripcion %></textarea><br><br>
+                <label>Pie</label>
+                <input type="text" name="pie" value="<%= bannerConfig.pie %>"><br><br>
+                <label>Color Texto</label>
+                <input type="color" name="colorTexto" value="<%= bannerConfig.estilos.colorTexto %>"><br><br>
+                <label>Color Borde</label>
+                <input type="color" name="colorBorde" value="<%= bannerConfig.estilos.colorBorde %>"><br><br>
+                <label>Tamaño</label>
+                <select name="tamanoLetra"><br><br>
+                    <option value="16px" <%= bannerConfig.estilos.tamanoLetra === '16px' ? 'selected' : '' %>>Pequeño</option>
+                    <option value="24px" <%= bannerConfig.estilos.tamanoLetra === '24px' ? 'selected' : '' %>>Mediano</option>
+                    <option value="32px" <%= bannerConfig.estilos.tamanoLetra === '32px' ? 'selected' : '' %>>Grande</option>
+                </select><br><br>
+                <label>Img 1</label><input type="file" name="img1" accept=".jpg,.jpeg,.png,.webp">
+                <label>Img 2</label><input type="file" name="img2" accept=".jpg,.jpeg,.png,.webp">
+                <label>Img 3</label><input type="file" name="img3" accept=".jpg,.jpeg,.png,.webp">
+                <div style="margin-top:12px;"><button type="submit">Actualizar Banner</button></div>
+            </form>
+
+            <div style="margin-top:18px;">
+                <h3>Vista Banner</h3>
+                <div style="border:1px solid #eee; padding:8px;">
+                    <strong><%= bannerConfig.cabecera %></strong>
+                    <p><i><%= bannerConfig.descripcion %></i></p>
+                    <% if (bannerConfig.imagenes && bannerConfig.imagenes.length>0) { %>
+                        <div style="display:flex; gap:8px;">
+                            <% bannerConfig.imagenes.forEach(i => { %>
+                                <img src="/images/banner/<%= i %>" alt="img" style="width:80px; height:50px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                            <% }) %>
+                        </div>
+                    <% } else { %>
+                        <p><em>Sin imágenes</em></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h2>Personalizar Tienda</h2>
+            <form action="/admin/config" method="POST" enctype="multipart/form-data">
+                <label>Nombre Tienda</label>
+                <input type="text" name="nombreTienda" value="<%= config.nombreTienda %>" required><br><br>
+
+                <label>Moneda</label>
+                <select name="moneda">
+                    <option value="$" <%= config.moneda === '$' ? 'selected' : '' %>>Dólar ($)</option>
+                    <option value="C$" <%= config.moneda === 'C$' ? 'selected' : '' %>>Córdoba (C$)</option>
+                    <option value="€" <%= config.moneda === '€' ? 'selected' : '' %>>Euro (€)</option>
+                </select><br><br>
+
+                <label>Color Header</label>
+                <input type="color" name="colorPrimario" value="<%= config.colores.primario %>"><br><br>
+
+                <label>Color Fondo</label>
+                <input type="color" name="colorSecundario" value="<%= config.colores.secundario %>"><br><br>
+
+                <label>Logo (opcional)</label>
+                <input type="file" name="logo" accept=".jpg,.jpeg,.png,.webp">
+
+                <label>Imagen Header (opcional)</label>
+                <input type="file" name="headerBg" accept=".jpg,.jpeg,.png,.webp">
+
+                <div style="margin-top:12px;"><button type="submit">Guardar Cambios</button></div>
+            </form>
+
+            <div style="margin-top:14px;">
+                <h4>Previsualización</h4>
+                <div style="padding:8px; border:1px solid #eee;">
+                    <% if (config.logo) { %>
+                        <img src="/images/config/<%= config.logo %>" alt="logo" style="height:48px;">
+                    <% } %>
+                    <p><b><%= config.nombreTienda %></b> — Moneda: <%= config.moneda %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

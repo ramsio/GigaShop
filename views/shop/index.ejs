@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= config.nombreTienda %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+
+    <div class="main-layout">
+        <aside class="sidebar-left">
+            <h3>Categorías</h3>
+            <ul>
+                <li><a href="/">Ver Todas</a></li>
+                <% categorias.forEach(c => { %>
+                    <li><a href="/?cat=<%= encodeURIComponent(c.nombre) %>"><%= c.nombre %></a></li>
+                <% }) %>
+            </ul>
+        </aside>
+
+        <main class="products-area">
+            <% if(productos.length === 0) { %>
+                <p>No hay productos en esta categoría.</p>
+            <% } %>
+
+            <% productos.forEach(p => { %>
+                <div class="card">
+                    <a href="/producto/<%= p._id %>" style="text-decoration:none; color:inherit;">
+                        <img src="/images/productos/<%= p.imagen || 'default.jpg' %>" alt="<%= p.nombre %>">
+                        <h3><%= p.nombre %></h3>
+                    </a>
+
+                    <p style="font-size:14px; color:#666;">Categoría: <%= p.categoria %></p>
+                    <p><%= config.moneda %><%= Number(p.precio).toFixed(2) %></p>
+
+                    <% if(user) { %>
+                        <a href="/agregar-carrito/<%= p._id %>"><button>Añadir al Carrito</button></a>
+                    <% } else { %>
+                        <a href="/login"><button>Login para Comprar</button></a>
+                    <% } %>
+                </div>
+            <% }) %>
+        </main>
+
+        <aside class="sidebar-right">
+            <div class="banner-box" style="border-color: <%= banner.estilos.colorBorde %>;">
+                <h2 class="animado" style="color: <%= banner.estilos.colorTexto %>; font-size: <%= banner.estilos.tamanoLetra %>;">
+                    <%= banner.cabecera %>
+                </h2>
+
+                <div class="carousel">
+                    <% if (banner.imagenes && banner.imagenes.length > 0) { %>
+                        <% banner.imagenes.forEach((img, i) => { %>
+                            <img src="/images/banner/<%= img %>" class="<%= i===0 ? 'active' : '' %>" alt="banner-<%= i %>">
+                        <% }) %>
+                    <% } else { %>
+                        <p>[Sin imágenes]</p>
+                    <% } %>
+                </div>
+
+                <p><i><%= banner.descripcion %></i></p>
+                <small><%= banner.pie %></small>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+    (function(){
+        const images = document.querySelectorAll('.carousel img');
+        if (!images || images.length === 0) return;
+        let current = 0;
+        setInterval(() => {
+            images[current].classList.remove('active');
+            current = (current + 1) % images.length;
+            images[current].classList.add('active');
+        }, 3000);
+    })();
+    </script>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

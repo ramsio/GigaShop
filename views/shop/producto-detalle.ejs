@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+<style>
+    .zoom-container { overflow:hidden; width:400px; height:400px; border:1px solid #ccc; border-radius:8px; }
+    .zoom-img { width:100%; height:100%; object-fit:cover; transition: transform 0.3s ease; cursor:zoom-in; }
+    .zoom-img:hover { transform: scale(1.4); }
+</style>
+
+<div style="padding:40px; display:flex; gap:40px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
+    <div class="zoom-container">
+        <img src="/images/productos/<%= p.imagen %>" class="zoom-img" alt="<%= p.nombre %>">
+    </div>
+
+    <div style="max-width:480px;">
+        <h1><%= p.nombre %></h1>
+        <h2 style="color:green;"><%= config.moneda %><%= Number(p.precio).toFixed(2) %></h2>
+        <p><b>Categoría:</b> <%= p.categoria %></p>
+        <p>Stock: <%= p.stock %></p>
+        <br>
+        <% if(user) { %>
+            <a href="/agregar-carrito/<%= p._id %>"><button style="padding:12px 20px; background:#ff9900; border:none; color:white; cursor:pointer;">Añadir al Carrito</button></a>
+        <% } else { %>
+            <a href="/login">Inicia sesión para comprar</a>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

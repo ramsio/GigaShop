@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso a la Tienda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+
+    <main style="display:flex; justify-content:center; gap:30px; padding:40px; flex-wrap:wrap;">
+        <section style="width:320px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+            <h2>Iniciar Sesión</h2>
+            <form action="/login-user" method="POST">
+                <label>Correo</label><br>
+                <input type="email" name="email" required style="width:100%; padding:8px; margin-top:6px;"><br><br>
+                <label>Contraseña</label><br>
+                <input type="password" name="password" required style="width:100%; padding:8px; margin-top:6px;"><br><br>
+                <button type="submit" style="width:100%; padding:10px; background:#333; color:white; border:none; cursor:pointer;">ENTRAR</button>
+            </form>
+        </section>
+
+        <section style="width:320px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+            <h2>Crear Cuenta</h2>
+            <form action="/registro" method="POST">
+                <label>Nombre</label><br>
+                <input type="text" name="nombre" required style="width:100%; padding:8px; margin-top:6px;"><br><br>
+                <label>Correo</label><br>
+                <input type="email" name="email" required style="width:100%; padding:8px; margin-top:6px;"><br><br>
+                <label>Contraseña</label><br>
+                <input type="password" name="password" required style="width:100%; padding:8px; margin-top:6px;"><br><br>
+                <button type="submit" style="width:100%; padding:10px; background:#28a745; color:white; border:none; cursor:pointer;">REGISTRARSE</button>
+            </form>
+        </section>
+    </main>
+
+    <%- include('../partials/footer') %>
+</body>
+</html>

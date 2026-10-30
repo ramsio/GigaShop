@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Inventario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; padding:16px; background:#f4f6f8; margin:0; }
+    .wrap { max-width:1200px; margin:0 auto; }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th, td { border:1px solid #eee; padding:8px; text-align:left; }
+    .toolbar { display:flex; gap:8px; margin-bottom:12px; align-items:center; }
+    .low { background:#fff3cd; }
+    .critical { background:#f8d7da; }
+    input[type="text"] { padding:8px; flex:1; border:1px solid #ccc; border-radius:4px; }
+    button { padding:8px 12px; border:none; border-radius:4px; background:#333; color:#fff; cursor:pointer; }
+    a.btn { display:inline-block; padding:8px 12px; border-radius:4px; background:#555; color:#fff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Inventario</h1>
+
+    <div class="toolbar">
+      <form action="/admin/inventario" method="GET" style="flex:1; display:flex; gap:8px;">
+        <input type="text" name="q" value="<%= q %>" placeholder="Buscar por nombre...">
+        <button type="submit">Buscar</button>
+        <a class="btn" href="/admin/inventario">Limpiar</a>
+        <a class="btn" href="/admin">Volver al Panel</a>
+      </form>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% productos.forEach(p => {
+          const cls = p.stock < 2 ? 'critical' : (p.stock < 5 ? 'low' : '');
+        %>
+          <tr class="<%= cls %>">
+            <td><%= p.nombre %></td>
+            <td><%= p.categoria %></td>
+            <td><%= config && config.moneda ? config.moneda : '$' %><%= Number(p.precio).toFixed(2) %></td>
+            <td><%= p.stock %></td>
+            <td><%= p.activo ? 'Activo' : 'Inactivo' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

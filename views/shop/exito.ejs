@@ -1,0 +1,9 @@
+<%- include('../partials/header') %>
+<div style="max-width:700px; margin:100px auto; text-align:center; padding:40px; border:1px solid #28a745; border-radius:10px; background:#f0fff4;">
+    <div style="font-size:60px;">✅</div>
+    <h1 style="color:#28a745;">¡Compra Realizada con Éxito!</h1>
+    <p>¡Gracias por comprar en <b><%= config.nombreTienda %></b>!</p>
+    <p>Hemos enviado un correo de confirmación a <b><%= email %></b>.</p>
+    <a href="/"><button style="padding:12px 22px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;">Volver a la Tienda</button></a>
+</div>
+<%- include('../partials/footer') %>

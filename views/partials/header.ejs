@@ -1,0 +1,33 @@
+<header style="
+    background-color: <%= config.colores.primario %>;
+    color: <%= config.colores.texto %>;
+    <% if (config.headerBg) { %>
+        background-image: url('/images/config/<%= config.headerBg %>');
+        background-size: cover; background-position: center;
+    <% } %>">
+  <div style="background: rgba(0,0,0,0.35); padding: 12px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap: 15px; max-width:1200px; margin:0 auto;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <% if(config.logo) { %>
+          <img src="/images/config/<%= config.logo %>" alt="logo" style="height:64px; border-radius:6px;">
+        <% } %>
+        <h1 style="margin:0; font-size:20px;"><%= config.nombreTienda %></h1>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <form action="/" method="GET" style="display:flex; gap:6px;">
+          <input type="text" name="q" placeholder="Buscar productos..." value="<%= typeof query !== 'undefined' ? query : '' %>" style="padding:6px; border-radius:4px; border:1px solid #ccc;">
+          <button type="submit" style="padding:6px 10px; border:none; border-radius:4px; background:#fff; color:#333; cursor:pointer;">Buscar</button>
+        </form>
+
+        <% if(user) { %>
+          <span style="color:<%= config.colores.texto %>">Hola, <b><%= user.nombre %></b></span>
+          <a href="/carrito" style="color:<%= config.colores.texto %>; font-weight:bold; text-decoration:none;">Mi Carrito (<%= cartCount %>)</a>
+          <a href="/logout" style="color:<%= config.colores.texto %>; text-decoration:none;">Cerrar Sesión</a>
+        <% } else { %>
+          <a href="/login" style="color:<%= config.colores.texto %>; text-decoration:none;">Iniciar Sesión / Registrarse</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</header>
